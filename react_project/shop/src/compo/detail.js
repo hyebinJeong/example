@@ -26,6 +26,7 @@ function Detail(props) {
     return x.id == id;
   });
   let [alert, setAlert] = useState(true);
+  let [num, setNum] = useState("");
 
   useEffect(() => {
     // 타이머 주는 법 : setTimeout함수는 밀리세컨드 단위
@@ -41,6 +42,12 @@ function Detail(props) {
     };
   }, []);
 
+  useEffect(() => {
+    if (isNaN(num) == true) {
+      window.alert("그러지마세요");
+    }
+  }, [num]);
+
   return (
     <div className="container">
       <Col>
@@ -53,7 +60,12 @@ function Detail(props) {
           style={{ width: "40%", marginTop: "30px" }}
         ></img>
         <div>
-          <input placeholder="수량입력란" style={{ marginTop: "10px" }}></input>
+          <input
+            onChange={(e) => {
+              setNum(e.target.value);
+            }}
+            placeholder="수량입력란"
+          />
           <h4>{찾은상품.title}</h4>
           <p>{찾은상품.content}</p>
         </div>
