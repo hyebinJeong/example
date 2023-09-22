@@ -5,11 +5,15 @@ import { Button, Navbar, Container, Nav, Col, Row } from "react-bootstrap";
 // import img1 from "/image/img1.jpg";
 // import img2 from "/image/img2.jpg";
 // import img3 from "/image/img3.jpg";
-import { useState } from "react";
+import { useState, createContext } from "react";
 import data from "./data.js";
 import { Routes, Route, Link, useNavigate, Outlet } from "react-router-dom";
 // import "./compo/Detail";
 import Detail from "./compo/Detail";
+import axios from "axios";
+import Cart from "./compo/Cart";
+
+export let Context1 = createContext();
 
 function Card(props) {
   return (
@@ -25,8 +29,10 @@ function Card(props) {
 }
 
 function App() {
-  let [place] = useState(data);
+  let [place, setPlace] = useState(data);
   let navigate = useNavigate();
+
+  // let[재고, set재고] = usetState([10,11,12]);
 
   return (
     <div className="App">
@@ -60,7 +66,6 @@ function App() {
       <Link className="link" to="/about">
         어바웃페이지
       </Link>
-
       <Routes>
         <Route
           path="/"
@@ -74,10 +79,31 @@ function App() {
                   })}
                 </Row>
               </Container>
+
+              <button
+                onClick={() => {
+                  axios
+                    .get("https://codingapple1.github.io/shop/data2.json")
+                    .then((결과) => {
+                      let copy = [...place, ...결과.data];
+                      setPlace(copy);
+                    });
+                }}
+              >
+                더보기
+              </button>
             </div>
           }
         ></Route>
-        <Route path="/detail/:id" element={<Detail place={place} />}></Route>
+
+        <Route
+          path="/detail/:id"
+          element={
+            <Context1.Provider value={{place }}>
+              <Detail place={place} />
+            </Context1.Provider>
+          }
+        ></Route>
 
         {/* <Route path="/about" element={<About />}></Route>
         <Route path="/about/member" element={<About />}></Route>
@@ -98,6 +124,8 @@ function App() {
           ></Route>
           <Route path="two" element={<div>생일기념 쿠폰받기</div>}></Route>
         </Route>
+
+        <Route path="/cart" element={<Cart></Cart>}></Route>
       </Routes>
     </div>
   );

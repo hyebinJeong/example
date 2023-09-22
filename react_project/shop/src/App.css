@@ -1,3 +1,13 @@
+.start {
+  /* 투명도 설정 속성 */
+  opacity: 0;
+}
+.end {
+  opacity: 1;
+  /* opacity가 변경될 때 0.5초에 걸쳐서 변경해주세요 */
+  transition: opacity 0.5s;
+}
+
 .main-nav {
   background-color: pink;
   margin-bottom: 20px;
@@ -23,6 +33,7 @@
   padding: 10px 20px;
   border-radius: 20px;
 }
+
 .App {
   text-align: center;
 }

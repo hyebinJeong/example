@@ -1,7 +1,10 @@
-import { useEffect, useState } from "react";
-import { Col } from "react-bootstrap";
+import { useContext, useEffect, useState } from "react";
+import { Col, Nav } from "react-bootstrap";
+import context from "react-bootstrap/esm/AccordionContext";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+
+import { Context1 } from "./../App.js";
 
 let YellowBtn = styled.button`
   background: ${(props) => props.bg};
@@ -21,12 +24,19 @@ let Box = styled.div`
 `;
 
 function Detail(props) {
+  // 보관함 해체해줌
+  let { 재고 } = useContext(Context1);
+
   let { id } = useParams();
   let 찾은상품 = props.place.find(function (x) {
     return x.id == id;
   });
   let [alert, setAlert] = useState(true);
   let [num, setNum] = useState("");
+
+  //useState()안에는 숫자형, 문자형 둘다 가능하지만,
+  // 3개의 탭을 0,1,2로 표현해주면 좋을 것 같아서 숫자 사용!
+  let [탭, 탭변경] = useState(0);
 
   useEffect(() => {
     // 타이머 주는 법 : setTimeout함수는 밀리세컨드 단위
@@ -70,6 +80,59 @@ function Detail(props) {
           <p>{찾은상품.content}</p>
         </div>
       </Col>
+
+      <Nav variant="tabs" defaultActiveKey="/home">
+        <Nav.Item>
+          <Nav.Link eventKey="/link-1" onClick={() => 탭변경(0)}>
+            버튼1
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link eventKey="link-2" onClick={() => 탭변경(1)}>
+            버튼2
+          </Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link eventKey="link-3" onClick={() => 탭변경(2)}>
+            버튼3
+          </Nav.Link>
+        </Nav.Item>
+      </Nav>
+      <TabContent 탭={탭}></TabContent>
+    </div>
+  );
+}
+
+// function TabContent({ 탭 }) {
+//   if (탭 == 0) {
+//     return <div>내용0</div>;
+//   }
+//   if (탭 == 1) {
+//     return <div>내용1</div>;
+//   }
+//   if (탭 == 2) {
+//     return <div>내용2</div>;
+//   }
+// }
+
+// if문 없이 쓰는 방법
+function TabContent({ 탭 }) {
+  // 탭이라는게 변경될 때마다 안의 코드를 실행해줌
+  let [fade, setFade] = useState("");
+
+  useEffect(() => {
+    setTimeout(() => {
+      setFade("end");
+    }, 100);
+    return () => {
+      setFade("");
+    };
+  }, [탭]);
+
+  return (
+    // start 다음 띄어쓰기 꼭 해주기 (클래스명 두개 주는거니까)
+    <div className={`start ${fade}`}>
+      {[<div>내용0</div>, <div>내용1</div>, <div>내용2</div>][탭]}
     </div>
   );
 }
