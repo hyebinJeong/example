@@ -1,16 +1,28 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
-
-// state 하나를 slice라고 부름
-let user = createSlice({
-  name : 'user',
-  initialState : 'been' // 유저 이름 보관할때 많이 사용함
-})
+// store에서 user에 있는 변수를 사용하고 싶으면 user import 해주기
+import user from "./store/userSlice";
 
 //새로운 slice 등록
 let stock = createSlice({
   name : 'stock',
   initialState : [10, 11, 12]
 })
+
+let cart = createSlice({
+  name: 'cart',
+  initialState : [
+    {id : 0, name : 'White and Black', Count : 2},
+    {id : 2, name : 'Grey yordan', counrt : 1 }
+  ],
+  reducers : {
+    addCount(state, action){
+      let 번호 = state.findIndex((a)=>{return a.id == action.payload})
+      state[번호].count++
+    }
+  }
+})
+// addCount함수를 cart.actions에서 빼서 export해주세요
+export let { addCount } = cart.actions
 
 export default configureStore({
   reducer: {
@@ -21,6 +33,7 @@ export default configureStore({
     */
   user : user.reducer,
   // 새로운 slice 만들었으면 꼭 여기에 등록해야함!
-  stock : stock.reducer
+  stock : stock.reducer,
+  cart : cart.reducer
   },
 });
