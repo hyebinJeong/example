@@ -1,17 +1,31 @@
-import React from 'react'
+import React, { memo, useMemo, useState } from 'react'
 import { Table } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 import { addCount } from '../store';
 import { changeName, increase} from '../store/userSlice';
 
-const Cart = () => {
+// function 함수(){
+//   return 반복문 10억번 돌린결과
+// }
+
+ let Child= memo(function(){
+  return <div>자식 컴포넌트</div>
+})
+
+function Cart (){
+
+  // let result = useMemo(()=>{return 함수()},[state])
 
   // Redux store 가져와줌
   let state = useSelector((state)=>{return state})
   let dispatch = useDispatch()
+  let [count, setCount] = useState(0)
 
   return (
     <div>
+      <br></br>
+      <Child></Child>
+      <button onClick={()=>{setCount(count+1)}}></button>
       <br></br>
 
       {state.user.name}

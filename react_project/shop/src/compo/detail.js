@@ -3,6 +3,8 @@ import { Col, Nav } from "react-bootstrap";
 import context from "react-bootstrap/esm/AccordionContext";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import { addItem } from "../store.js";
+import { useDispatch } from "react-redux";
 
 import { Context1 } from "./../App.js";
 
@@ -37,6 +39,20 @@ function Detail(props) {
   //useState()안에는 숫자형, 문자형 둘다 가능하지만,
   // 3개의 탭을 0,1,2로 표현해주면 좋을 것 같아서 숫자 사용!
   let [탭, 탭변경] = useState(0);
+  let dispatch = useDispatch();
+
+  useEffect(()=>{
+     //그 페이지에 보이는 상품 id 가져와서
+     //localStorage에 watched 항목에 추가
+    let 꺼낸거 = localStorage.setItem('watched')
+    꺼낸거 = JSON.parse(꺼낸거)
+    꺼낸거.push(찾은상품.id)
+    꺼낸거 = new Set(꺼낸거)
+    꺼낸거 = Array.from(꺼낸거)
+    localStorage.setItem('watched', JSON.stringify(꺼낸거))
+  },[])
+
+
 
   useEffect(() => {
     // 타이머 주는 법 : setTimeout함수는 밀리세컨드 단위
@@ -78,6 +94,10 @@ function Detail(props) {
           />
           <h4>{찾은상품.title}</h4>
           <p>{찾은상품.content}</p>
+          <button className="btn btn-danger"
+          onClick={()=>{
+            dispatch(addItem({id: 3, name: 'Pink cup', count: 1}))
+          }}></button>
         </div>
       </Col>
 

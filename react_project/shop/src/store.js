@@ -18,11 +18,16 @@ let cart = createSlice({
     addCount(state, action){
       let 번호 = state.findIndex((a)=>{return a.id == action.payload})
       state[번호].count++
+    },
+    addItem(state,action){
+      // state.push --> array 뒤에 자료 추가해주는 함수
+      state.push(action.payload)
     }
   }
 })
+
 // addCount함수를 cart.actions에서 빼서 export해주세요
-export let { addCount } = cart.actions
+export let { addCount, addItem } = cart.actions
 
 export default configureStore({
   reducer: {
